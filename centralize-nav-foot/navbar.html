@@ -1,0 +1,47 @@
+    <!-- Centralized navbar for top-level pages -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #3e4241;">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="."><strong>Cultural Resource Management Legislation</strong></a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+          <ul class="nav navbar-nav">
+            <li><a href=".">Legislation Map</a></li>
+            <li><a href="sites/issues-list.html">Legislation List</a></li>
+            <li><a id="menu-toggle" style="cursor: pointer">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	<!-- Drawer Script -->
+	<script type="text/javascript">
+		$('#about').BootSideMenu({
+			side:"right",
+			remember: false,
+			pushBody: false,
+			autoClose: true,
+			closeOnClick: false,
+			width: "33%"
+		});
+
+		$('#menu-toggle').click(function () {
+			$('#about').BootSideMenu.toggle();
+		});
+	</script>
+
+	<!-- Drawer ABOUT -->
+	<div id="about">
+		<h3><strong>Cultural Resource Management Legislation</strong></h3>
+		<p>This project began as a collaborative project in the Spring 2026 with Dr. Phyllis Johnson's ANP 419: Cultural Resource Management class at Michigan State University. Students all chose a specific legislative issue on which to write an analytical essay. They created the webpage for the atlas entry (basic HTML, CSS, and some light JS if they felt ambitious), added the pin to the map by adding their site's information (Lat/Lon, time period, brief site description) to a CSV via Google Docs. <a href="https://github.com/mapbox/leaflet-omnivore">Leaflet Omnivore</a> was used to pull the data out of the CSV and onto a simple Leaflet based map. In addition to doing focused research and writing on specific cultural resource management legislation, students learned basic HTML, CSS and GitHub (forking, pull requests, comitting, etc.) during the course of the assignment.</p>
+
+    <p>The project has several goals. First, it allows the students to have focused, activist-oriented engagement with a specific issue (and write about it). Second, students learn valuable digital skills such as working with HTML, digital mapping, version control, and project management. These skills are not normally part of a senior level anthropology classes, but can easily be applied to many anthropological issues and projects. Finally, students will build something public, meaning they will contribute to the collective knowledge and resources available on the open web about CRM legislation in the USA.</p>
+
+    <p>This project is a direct child of the <a href="https://github.com/msu-anthropology/indian-country">This is Indian Country</a>, a course project developed by Dr. Mindy Morgan and <a href="http://leadr.msu.edu">LEADR</a> at MSU and especially through the efforts of <a href="https://github.com/geyerbri">Brian Geyer</a>. Starting in January 2026, <a href="https://github.com/BeeGrimes">Bryttany Grimes</a> and <a href="https://github.com/kharperame">Amelia Konda-Harper</a> maintained the code repository and teaching responsibilities.</p>
+	  </div>

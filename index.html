@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <script id="tinyhippos-injected">if (window.top.ripple) { window.top.ripple("bootstrap").inject(window, document); }</script>
+  <head>
+    <title>Cultural Resource Management Legislation</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme/dracula.css">
+    <link rel="stylesheet" href="css/leaflet.css" />
+	  <link rel="stylesheet" href="css/BootSideMenu.css">
+  </head>
+
+  <body class="dracula">
+    <!-- MODAL -->
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-dialog modal-vertical-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">Welcome to <em>Cultural Resource Management Legislation</em></h4>
+            </div>
+            <div class="modal-body">
+              <em>Cultural Resource Management Legislation</em> is a digital cultural map of cultural resource management issues in the contiguous United States. Collaboratively produced at Michigan State University during multiple semesters by the students registered in the Special Topics class (ANP 491), <em>Cultural Resource Management Legislation</em> represents an experiment in applied digital anthropology undergraduate learning.
+            </div>
+            <div class="modal-footer">
+              <label ><input class="dont" type="checkbox" name="dismiss"> Don't show again</label><br />
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--cenralized navbar-->
+    <div id="central-nav"></div>
+
+    <!--TIME SLIDER-->
+    <div id="time-slider-container">
+      <label for="time-slider">Filter by Date:</label>
+      <input type="range" id="time-slider" step="1">
+      <span id="time-display">All Dates</span>
+    </div>
+
+    <!--MAP-->
+    <div id="map"></div>
+
+    <!--centralized footer-->
+    <div id="central-foot"></div>
+
+    <!--Bootstrap core JavaScript-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="leaflet-omnivore-master/leaflet-omnivore.js"></script>
+    <script src="js/leaflet.js"></script>
+  	<script src="js/BootSideMenu.js"></script>
+  	<script type="text/javascript">
+    	$(document).ready(function(){
+    		$("a[rel=citation]").popover({
+    			placement : 'top'
+    		}).click(function (p) {
+    			p.preventDefault();
+    			var $self = $(this);
+    			setTimeout(function () {
+    				$self.popover('hide');
+    			}, 4000);
+    		 });
+    		});
+    </script>
+
+    <!-- Calls centralized navbar and footer -->
+    <script src="centralize-nav-foot/nav-foot.js"></script>
+
+    <!-- Initiates Modal and Uses cookies for Dont Show Again Checkbox -->
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#myModal').modal();
+        function setCookie(){
+          var dis = document.cookie;
+          while(dis.charAt(0)==" ") dis = dis.substring(1);
+          if(dis.substring(8,13)== "false"){
+            $('#myModal').modal('hide');
+          }
+          console.log(dis.substring(8,13));
+        }
+        setCookie();
+        var $check = $("input.dont").click(function(){
+          if($("input.dont").is(":checked")){
+          document.cookie = "display=false";
+          }else{
+          document.cookie = "display=true";
+          }
+        });
+      });
+    </script>
+
+    <!-- Centers Modal Vertically -->
+    <script type="text/javascript">
+      function centerModal() {
+        $(this).css('display', 'block');
+        var $dialog = $(this).find(".modal-dialog");
+        var offset = ($(window).height() - $dialog.height()) / 2;
+        // Center modal vertically in window
+        $dialog.css("margin-top", offset);
+      }
+      $('.modal').on('show.bs.modal', centerModal);
+      $(window).on("resize", function () {
+        $('.modal:visible').each(centerModal);
+      });
+    </script>
+
+    <!-- Initiates Map and pulls data from .CSV -->
+    <script>
+      var map = L.map('map').setView([40.8754864, -100.937309], 5);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          minZoom: 2,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+      
+      var allMarkers = [];
+      var dates = [];
+      var markersLayer = L.layerGroup().addTo(map);
+      
+      omnivore.csv('sites-popup.csv') //Add site-map csv here
+      .on('ready', function(layer) {
+        this.eachLayer(function(marker) {
+          // Bind a popup to each icon based on the same properties
+          // Adds coloumns of extra info to marker popup
+          marker.bindPopup(marker.toGeoJSON().properties.issue +
+          marker.toGeoJSON().properties.culture + '<br><br> ' +
+          marker.toGeoJSON().properties.info + '<br><br> ' +
+          marker.toGeoJSON().properties.link, {autoPanPadding: [5,55]});
+          
+          // Store marker with its date
+          var markerDate = marker.toGeoJSON().properties.date;
+          var year = null;
+          if (markerDate) {
+            year = parseInt(markerDate);
+            if (!isNaN(year)) {
+              dates.push(year);
+            } else {
+              year = null; // Invalid date format, treat as no date
+            }
+          }
+          
+          // Add all markers to the array (even those without valid dates)
+          allMarkers.push({marker: marker, date: year});
+          
+          // Add all markers initially
+          markersLayer.addLayer(marker);
+        });
+        
+        // Set up the time slider
+        if (dates.length > 0) {
+          dates.sort(function(a, b) { return a - b; });
+          var minDate = dates[0];
+          var maxDate = dates[dates.length - 1];
+          
+          var slider = document.getElementById('time-slider');
+          slider.min = minDate;
+          slider.max = maxDate;
+          slider.value = maxDate;
+          
+          updateTimeDisplay(maxDate);
+          
+          slider.addEventListener('input', function() {
+            var selectedYear = parseInt(this.value);
+            filterMarkersByDate(selectedYear);
+            updateTimeDisplay(selectedYear);
+          });
+        }
+      });
+      
+      function filterMarkersByDate(year) {
+        markersLayer.clearLayers();
+        allMarkers.forEach(function(item) {
+          if (item.date === null || item.date <= year) {
+            markersLayer.addLayer(item.marker);
+          }
+        });
+      }
+      
+      function updateTimeDisplay(year) {
+        document.getElementById('time-display').textContent = 
+          (year !== null && year !== undefined) ? 'Up to Year: ' + year : 'All Dates';
+      }
+    </script>
+  </body>
+</html>
