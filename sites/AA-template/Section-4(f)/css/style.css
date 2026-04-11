@@ -125,7 +125,7 @@ code {
 
 #about p,h1,h2,h3,h4,h5 {
 	padding-left: 15px;
-	padding-right: 15px;
+	padding-right: 100px;
 	color: #6cb1a0;
 	line-height: 1.42857143;
 	letter-spacing: normal;
