@@ -6,3 +6,5 @@ This project began as a collaborative project in the Spring 2026 with Dr. Phylli
 The project has several goals. First, it allows the students to have focused, activist-oriented engagement with a specific issue concerning cultural resource management (and write about it). Second, students will learn valuable digital skills such as working with HTML, digital mapping, version control, and project management. These skills are not normally part of a senior level anthropology classes, but can easily be applied to many anthropological issues and projects. Finally, students will build something public, meaning they will contribute to the collective knowledge and resources available on the open web about cultural resource management.
 
 This project is a direct child of the Digital Atlas of Egyptian Archaeology (DAEA) and This is Indian Country. Both This is Indian Country and DAEA were developed in partnership with LEADR at MSU. Starting in January of 2026, Bryttany Grimes and Amelia Konda-Harper maintain the code repository and teaching responsibilities.
+
+Testing PR DElETE ME!
